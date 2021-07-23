@@ -1,25 +1,14 @@
-import logo from './logo.svg';
-import './App.css';
+import "./styles.css";
+import charactersInfo from "./data/marvel/characters.json";
+import DetalleDeHeroe from "./components/DetalleDeHeroe";
 
-function App() {
+
+export default function App() {
+  console.log(charactersInfo)
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Caracteres de Marvel</h1>
+      <DetalleDeHeroe heroe={charactersInfo.data.results[0]}/>
     </div>
   );
 }
-
-export default App;
