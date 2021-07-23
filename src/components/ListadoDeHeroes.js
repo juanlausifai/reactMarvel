@@ -1,16 +1,35 @@
+
+
 function ListadoDeHeroes(props) {
-    console.log(props.heroes)
+    //console.log(props.heroes)
+    //console.log(props.selectedHeroe)
+   
     return (
       props.heroes.length > 0 && (
         <div className="col s12 m4">
-          <ul className="collection">
+          <ul className="collection" >
           
-          <li className="collection-header"><h4>Listado de heroes</h4></li>
-            {props.heroes.map((elemento) => {
+          <li className="collection-header"><h4 style={{color:props.colorWord}}>Listado de heroes</h4></li>
+            {props.heroes.map((elemento,index) => {
+              
+              let backgroundColorSelected=props.backgroundColorTheme;
+              
+              if(index===props.selectedHeroe){
+                backgroundColorSelected="lightblue";
+                
+              }
               return (
-                <li class="collection-item avatar">
+                <li 
+                style={{backgroundColor:backgroundColorSelected}}
+                className="collection-item avatar">
                     <img src={elemento.thumbnail.path +"."+ elemento.thumbnail.extension} alt={elemento.name} class="circle"/>
-                    <a href="#!" className="title">{elemento.name}</a>
+                    <a 
+                    onClick={()=>{
+                      props.setSelectedHeroe(index);
+                    }}
+                     className="title">{
+                     elemento.name}
+                     </a>
                 </li>    
               );
             })}

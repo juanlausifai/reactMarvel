@@ -5,8 +5,8 @@ function DetalleDeHeroe(props){
     console.log(props.heroe)
     return (
         <div className="row">
-            <div className="col s12 m7">
-                <div className="card">
+            <div className="col s12 m7" >
+                <div className="card" style={{backgroundColor:props.backgroundColorTheme,color:props.colorWord}}>
                     <img 
                     className="HeroImg"
                     src={props.heroe.thumbnail.path +"."+ props.heroe.thumbnail.extension} 
