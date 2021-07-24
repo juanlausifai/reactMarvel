@@ -3,7 +3,7 @@ import React,{useState} from "react";
 import charactersInfo from "./data/marvel/characters.json";
 import DetalleDeHeroe from "./components/DetalleDeHeroe";
 import ListadoDeHeroes from "./components/ListadoDeHeroes";
-
+import CardMessageError from "./components/message/CardMessageError";
 
 export default function App() {
   //console.log(charactersInfo.data.results)
@@ -20,7 +20,7 @@ export default function App() {
     backgroundColorTheme="#000000";
     colorWord="#9e9e9e";
   }
-
+  charactersInfo.data.results=[];
   return (
     <div className="row" style={{backgroundColor:backgroundColorTheme}}>
       <div className="App col s12 m12" >
@@ -39,8 +39,15 @@ export default function App() {
           Dark
         </label>
         </div>
+        {charactersInfo.data.results.length>0 && ( 
+        <>  
         <ListadoDeHeroes colorWord={colorWord} backgroundColorTheme={backgroundColorTheme} heroes={charactersInfo.data.results} selectedHeroe={selectedHeroe} setSelectedHeroe={setSelectedHeroe}/>
         <DetalleDeHeroe colorWord={colorWord} backgroundColorTheme={backgroundColorTheme} heroe={charactersInfo.data.results[selectedHeroe]}/>
+        </>
+        )}
+        {charactersInfo.data.results.length===0 && (
+          <CardMessageError message="No existen resultados"></CardMessageError>
+        )}  
       </div>
     </div>
   );
