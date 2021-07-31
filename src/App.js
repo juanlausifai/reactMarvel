@@ -4,18 +4,28 @@ import charactersInfo from "./data/marvel/characters.json";
 import DetalleDeHeroe from "./components/DetalleDeHeroe";
 import ListadoDeHeroes from "./components/ListadoDeHeroes";
 import CardMessageError from "./components/message/CardMessageError";
+import { getHeroes } from "./services/marvel";
 
 export default function App() {
   //console.log(charactersInfo.data.results)
 
+  // Lista de heroes
+  const [heroes, setHeroes] = useState([]);
+
   //El heroe seleccionado
   const [selectedHeroe,setSelectedHeroe] = useState(0);
+
+  //Cantidad de heroes que ya vimos
+  const [first, setFirst] = useState(0);
 
   //El theme actual
   const [selectedTheme,setSelectedTheme] = useState(true);
 
   //Cargar heroe
-  const [cargarMasHeroes,setCargarMasHeroes] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+
+  // estado para busqueda
+  const [busquedaActual, setBusquedaActual] = useState("");
   
   let backgroundColorTheme='white'
   let colorWord="#000000";
@@ -24,32 +34,47 @@ export default function App() {
     colorWord="#9e9e9e";
   }
   
-  charactersInfo.data.results=[];
+  const selectedHeroeData = heroes ? heroes[selectedHeroe] : undefined;
 
   //Asincronico llamado a la API
-  useEffect(()=>{
-    async function getHeroes(){
-      return fetch("https://gateway.marvel.com:443/v1/public/characters?apikey=1f8617b0107bd7fb18974d1d05c648df")
-      .then((response)=>{
-        //console.log(response)
-        return response.json();
-        
-      });
-      
+  useEffect(() => {
+    if (isLoading) {
+      async function loadHeroes() {
+        const res = await getHeroes(first, 20, busquedaActual);
+        setLoading(false);
+        const newHeroList = [...heroes, ...res.data.results];
+        setHeroes(newHeroList);
+        setFirst(first + 20);
+      }
+      loadHeroes();
     }
-    if(cargarMasHeroes){
-      let heroes= getHeroes();
-      console.log(heroes)
-      
-    }
-    
-  });
+  }, [isLoading, first, busquedaActual, heroes]);
   
   return (
     <div className="row" style={{backgroundColor:backgroundColorTheme}}>
       <div className="App col s12 m12" >
-        <h1 style={{color:colorWord}}>Caracteres de Marvel</h1>
+        <h1 style={{color:colorWord}}>Personajes de Marvel</h1>
         
+        <div>
+          <input onChange={(e)=>{
+            setBusquedaActual(e.target.value);
+          }} type="text" value={busquedaActual}></input>
+
+        <button
+          onClick={() => {
+            //console.log("search " + busquedaActual);
+            setHeroes([]);
+            setSelectedHeroe(0);
+            setFirst(0);
+            setLoading(true);
+          }}
+          type="button"
+          className="waves-effect waves-light btn button-orange"
+        >
+          Buscar
+        </button>
+
+        </div>    
         <div className="switch">
         <label>
           Light
@@ -64,23 +89,37 @@ export default function App() {
           Dark
         </label>
         </div>
-
-        <div className="App col s12 m12 mt-5 mb-5">
+        {isLoading && (  
+          <div class="preloader-wrapper small active">
+            <div class="spinner-layer spinner-green-only">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div><div class="gap-patch">
+                <div class="circle"></div>
+              </div><div class="circle-clipper right">
+                <div class="circle"></div>
+              </div>
+            </div>
+          </div>
+         )}
+        {!isLoading && ( 
+        <div className="App col s12 m12 mt-5 mb-5 ">
           <a 
-          className="waves-effect waves-light btn" 
+          className="waves-effect waves-light btn button-orange" 
           onClick={()=>{
-            setCargarMasHeroes(true);
+            setLoading(!isLoading);
           }}
           >Cargar Heroes</a>
         </div>
-
-        {charactersInfo.data.results.length>0 && ( 
+        )}
+        
+        {heroes.length>0 && ( 
         <>  
-        <ListadoDeHeroes colorWord={colorWord} backgroundColorTheme={backgroundColorTheme} heroes={charactersInfo.data.results} selectedHeroe={selectedHeroe} setSelectedHeroe={setSelectedHeroe}/>
-        <DetalleDeHeroe colorWord={colorWord} backgroundColorTheme={backgroundColorTheme} heroe={charactersInfo.data.results[selectedHeroe]}/>
+        <ListadoDeHeroes colorWord={colorWord} backgroundColorTheme={backgroundColorTheme} heroes={heroes} selectedHeroe={selectedHeroe} setSelectedHeroe={setSelectedHeroe}/>
+        <DetalleDeHeroe colorWord={colorWord} backgroundColorTheme={backgroundColorTheme} heroe={heroes[selectedHeroe]}/>
         </>
         )}
-        {charactersInfo.data.results.length===0 && (
+        {heroes.length===0 && (
           <CardMessageError message="No existen resultados"></CardMessageError>
         )}  
       </div>

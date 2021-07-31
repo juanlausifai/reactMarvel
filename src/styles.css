@@ -1,6 +1,17 @@
 .App {
-    font-family: sans-serif;
+    font-family: 'Bangers', cursive;
     text-align: center;
+   /* background: rgb(253,29,29);
+background: linear-gradient(90deg, rgba(253,29,29,1) 0%, rgba(253,29,29,1) 50%, rgba(222,215,117,1) 100%);*/
+  }
+
+  .button-orange{
+    background-color:#FF6100 ;
+  }
+
+  a{
+    color:#FF6100 ;
+
   }
   
   .HeroImg {
@@ -75,4 +86,26 @@
 .materialert.warning{
     background-color: #fbc02d;
     color: #fff;
+}
+
+
+
+.scroll::-webkit-scrollbar {
+    -webkit-appearance: none;
+    background-color: #000;
+    
+}
+
+.scroll::-webkit-scrollbar-button:increment, .servicios::-webkit-scrollbar-button {
+    display: none;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+    background-color: #FF6100;
+    border-radius: 20px;
+    border: 2px solid #FF6100;
+}
+
+.scroll::-webkit-scrollbar-track {
+    border-radius: 10px;
 }

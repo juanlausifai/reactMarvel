@@ -6,7 +6,7 @@ function ListadoDeHeroes(props) {
    
     return (
       props.heroes.length > 0 && (
-        <div className="col s12 m4">
+        <div className="col s12 m4 scroll" style={{height:"300px",overflowY:"scroll"}}>
           <ul className="collection" >
           
           <li className="collection-header"><h4 style={{color:props.colorWord}}>Listado de heroes</h4></li>
